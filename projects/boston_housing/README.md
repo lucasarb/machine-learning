@@ -10,15 +10,32 @@ This project requires Python 2.7 and the following Python libraries installed:
 
 In addition, you will need to be able to run an iPython Notebook to complete this project.
 
+<<<<<<< HEAD
 ## Code
+=======
+Udacity recommends our students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
+>>>>>>> upstream/master
 
 Template code is provided in the `boston_housing.ipynb` notebook file. While some code has already been implemented to get you started, you will need to implement additional functionality when requested throughout the notebook.
 
+<<<<<<< HEAD
 ## Run
+=======
+Template code is provided in the `boston_housing.ipynb` notebook file. You will also be required to use the included `visuals.py` Python file and the `housing.csv` dataset file to complete your work. While some code has already been implemented to get you started, you will need to implement additional functionality when requested to successfully complete the project.
+>>>>>>> upstream/master
 
 In a terminal/command window, go to the top-level project directory `boston_housing/` (that contains this README). Then run:
 
+<<<<<<< HEAD
 ```ipython notebook boston_housing.ipynb```
+=======
+```ipython notebook boston_housing.ipynb```  
+```jupyter notebook boston_housing.ipynb```
+
+This will open the iPython Notebook software and project file in your browser.
+
+### Data
+>>>>>>> upstream/master
 
 ## Data
 
