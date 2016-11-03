@@ -6,7 +6,6 @@ import re
 import time
 import matplotlib.pyplot as plt
 import matplotlib
-import seaborn as sns
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 
