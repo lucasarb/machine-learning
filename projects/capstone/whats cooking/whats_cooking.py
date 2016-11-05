@@ -16,6 +16,9 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer, LabelEncoder
 from sklearn.model_selection import train_test_split
 
+#metrics
+from sklearn.metrics import classification_report
+
 #classifiers
 from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
@@ -90,12 +93,17 @@ def train_classifier(clf,x_train,y_train):
 
     return clf
 
-def train_test_score(clf,x_train,x_test,y_train,y_test):
+def train_test_score(clf,x_train,x_test,y_train,y_test,cuisine_list):
     #this functions measures the test score 
 
     clf = train_classifier(clf,x_train,y_train)
 
     print "Test score: %.4f" % clf.score(x_test.toarray(),y_test)
+
+    pred = clf.predict(x_test)
+    print "--------individual category report----------"
+    print classification_report(y_test,pred, target_names = cuisine_list)
+    print "-"*30
 
     return clf
 
@@ -144,6 +152,8 @@ if __name__ == "__main__":
     targets = data['cuisine']
     targets = lbl_enc.fit_transform(targets)
 
+    cuisine_list =[lbl_enc.inverse_transform(i) for i in xrange(20)]
+
     # Separate the training dataset into train and test
     x_train, x_test, y_train, y_test = train_test_split(count_matrix ,targets ,test_size = 0.33, random_state = 42)
 
@@ -152,31 +162,42 @@ if __name__ == "__main__":
     clf_SVC = LinearSVC(random_state = 42)
     clf_DT = DecisionTreeClassifier(random_state = 42)
     clf_NB = MultinomialNB()
-    clf_MLP = MLPClassifier(solver = 'lbfgs', alpha = 1e-2, hidden_layer_sizes=(60,50), random_state=42)
+    clf_MLP = MLPClassifier(solver = 'sgd', alpha = 1e-2, hidden_layer_sizes=(60,50), random_state=42)
 
     print "Training SVM classifier..."
-    clf_SVC = train_test_score(clf_SVC,x_train,x_test,y_train,y_test)
+    clf_SVC = train_test_score(clf_SVC,x_train,x_test,y_train,y_test,cuisine_list)
 
     print "Training Decision Tree Classifier..."
-    clf_DT = train_test_score(clf_DT,x_train,x_test,y_train,y_test)
+    clf_DT = train_test_score(clf_DT,x_train,x_test,y_train,y_test,cuisine_list)
 
     print "Training Naive Bayes Classifier..."
-    clf_NB = train_test_score(clf_NB,x_train,x_test,y_train,y_test)
+    clf_NB = train_test_score(clf_NB,x_train,x_test,y_train,y_test,cuisine_list)
 
     print "Training Multi-Layer Perceptron Classifier..."
-    clf_MLP = train_test_score(clf_MLP,x_train,x_test,y_train,y_test)
+    clf_MLP = train_test_score(clf_MLP,x_train,x_test,y_train,y_test, cuisine_list)
 
     print "Optimizing with grid search..."
     optim_clf = find_best_model(x_train,y_train)
 
+    pred = optim_clf.predict(x_test)
+
     print "Training score after grid search: {}".format(optim_clf.score(x_test,y_test))
+    print "--------individual category report----------"
+    print classification_report(y_test,pred, target_names = cuisine_list)
+    print "-"*30
 
     print "Using Bagging Classifier"
     bagging = BaggingClassifier(base_estimator = optim_clf, random_state = 42)
     bagging.fit(x_train,y_train)
 
     bag_score = bagging.score(x_test,y_test)
+    pred = bagging.predict(x_test)
+
     print "Bagging Score: {}".format(bag_score)
+    print "--------individual category report----------"
+    print classification_report(y_test,pred, target_names = cuisine_list)
+    print "-"*30
+
 
 
 

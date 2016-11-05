@@ -11,6 +11,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 
 
 train = pd.read_csv('train_modified.csv')
@@ -35,7 +36,8 @@ count_matrix_test = count_matrix[train.shape[0]:]
 targets = data['cuisine'].iloc[:39774]
 targets = lbl_enc.fit_transform(targets)
 
-x_train, x_test, y_train, y_test = train_test_split(count_matrix_train,targets ,test_size = 0.33, random_state = 42)
+x_train = count_matrix_train
+y_train = targets
 
 #Using the hyperparameters that were obtained from the whats_cooking.py grid search
 clf_SVM = LinearSVC(C=0.5, class_weight=None, dual=True, fit_intercept=True,
@@ -50,7 +52,6 @@ end = time.time()
 
 print "Time for Training: {}".format(end - start)
 print "SVM Train score: %.4f" % clf_SVM.score(x_train,y_train)
-print "SVM Test score: %.4f" % clf_SVM.score(x_test,y_test)
 
 #transform the labels into the original names
 predictions = clf_SVM.predict(count_matrix_test)
